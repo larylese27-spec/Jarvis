@@ -231,15 +231,29 @@
   </div>
 
   <script>
-    function activateJarvis() {
-      const message = document.getElementById("message");
+   function speak(text) {
+  const voice = new SpeechSynthesisUtterance(text);
 
-      message.textContent = "LISTENING...";
+  voice.lang = "pt-BR";
+  voice.rate = 0.9;
+  voice.pitch = 0.8;
+  voice.volume = 1;
 
-      setTimeout(() => {
-        message.textContent = "SYSTEM READY";
-      }, 2000);
-    }
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(voice);
+}
+
+function activateJarvis() {
+  const message = document.getElementById("message");
+
+  message.textContent = "LISTENING...";
+
+  speak("Sim. Estou ouvindo.");
+
+  setTimeout(() => {
+    message.textContent = "SYSTEM READY";
+  }, 2500);
+}
   </script>
 
 </body>
