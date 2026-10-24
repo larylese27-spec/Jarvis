@@ -311,10 +311,9 @@ function listen() {
     speak("Você disse: " + text);
   };
 
-  recognition.onerror = function() {
-    message.textContent = "VOICE ERROR";
-    speak("Não consegui ouvir você.");
-  };
+ recognition.onerror = function(event) {
+  message.textContent = "ERRO: " + event.error;
+};
 }
 
 function activateJarvis() {
