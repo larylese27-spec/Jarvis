@@ -243,6 +243,42 @@
   window.speechSynthesis.speak(voice);
 }
 
+function listen() {
+  const message = document.getElementById("message");
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    message.textContent = "VOICE NOT SUPPORTED";
+    speak("Desculpe. O reconhecimento de voz não está disponível neste navegador.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "pt-BR";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  message.textContent = "LISTENING...";
+
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const text = event.results[0][0].transcript;
+
+    message.textContent = text;
+
+    speak("Você disse: " + text);
+  };
+
+  recognition.onerror = function() {
+    message.textContent = "VOICE ERROR";
+    speak("Não consegui ouvir você.");
+  };
+}
+
 function activateJarvis() {
   const message = document.getElementById("message");
 
@@ -251,8 +287,8 @@ function activateJarvis() {
   speak("Sim. Estou ouvindo.");
 
   setTimeout(() => {
-    message.textContent = "SYSTEM READY";
-  }, 2500);
+    listen();
+  }, 1500);
 }
   </script>
 
