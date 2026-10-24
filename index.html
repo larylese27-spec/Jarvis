@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>J.A.R.V.I.S.</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at center, #062b4d 0%, #031321 35%, #00070d 75%);
+      color: #8feaff;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .interface {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title {
+      position: absolute;
+      top: 35px;
+      width: 100%;
+      text-align: center;
+      letter-spacing: 8px;
+      font-size: 25px;
+      text-shadow: 0 0 15px #00bfff;
+    }
+
+    .status {
+      position: absolute;
+      top: 75px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 4px;
+      opacity: 0.8;
+    }
+
+    .core {
+      width: 180px;
+      height: 180px;
+      border: 2px solid #00c8ff;
+      border-radius: 50%;
+      position: relative;
+      box-shadow:
+        0 0 20px #00bfff,
+        0 0 60px #0077aa,
+        inset 0 0 35px #0077aa;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .core::before,
+    .core::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid #4ee8ff;
+      border-radius: 50%;
+      animation: rotate 8s linear infinite;
+    }
+
+    .core::after {
+      inset: 40px;
+      border-style: dashed;
+      animation-direction: reverse;
+      animation-duration: 5s;
+    }
+
+    .center {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: #b8f7ff;
+      box-shadow:
+        0 0 15px #fff,
+        0 0 40px #00c8ff,
+        0 0 80px #008cff;
+    }
+
+    .line {
+      position: absolute;
+      background: #00bfff;
+      box-shadow: 0 0 8px #00bfff;
+      opacity: 0.7;
+    }
+
+    .line.left,
+    .line.right {
+      width: 18vw;
+      height: 1px;
+      top: 50%;
+    }
+
+    .line.left {
+      right: calc(50% + 95px);
+    }
+
+    .line.right {
+      left: calc(50% + 95px);
+    }
+
+    .panel {
+      position: absolute;
+      border: 1px solid #008dcc;
+      background: rgba(0, 35, 60, 0.25);
+      box-shadow: 0 0 15px rgba(0, 180, 255, 0.3);
+      padding: 15px;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .left-panel {
+      left: 30px;
+      bottom: 40px;
+    }
+
+    .right-panel {
+      right: 30px;
+      bottom: 40px;
+      text-align: right;
+    }
+
+    .message {
+      position: absolute;
+      bottom: 125px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      letter-spacing: 2px;
+      opacity: 0.9;
+    }
+
+    .mic {
+      position: absolute;
+      bottom: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 22px;
+      border: 1px solid #00c8ff;
+      background: rgba(0, 80, 120, 0.2);
+      color: #9eeeff;
+      letter-spacing: 3px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 190, 255, 0.4);
+    }
+
+    .mic:hover {
+      background: rgba(0, 160, 220, 0.3);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px #00bfff, 0 0 60px #0077aa;
+      }
+
+      50% {
+        transform: scale(1.06);
+        box-shadow: 0 0 35px #00d9ff, 0 0 90px #008cff;
+      }
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="interface">
+
+    <div class="title">J.A.R.V.I.S.</div>
+    <div class="status">SYSTEM ONLINE</div>
+
+    <div class="line left"></div>
+    <div class="line right"></div>
+
+    <div class="core">
+      <div class="center"></div>
+    </div>
+
+    <div class="message" id="message">
+      AWAITING COMMAND
+    </div>
+
+    <div class="panel left-panel">
+      SYSTEM<br><br>
+      CORE: ONLINE<br>
+      AUDIO: STANDBY<br>
+      MEMORY: ACTIVE
+    </div>
+
+    <div class="panel right-panel">
+      J.A.R.V.I.S.<br><br>
+      VOICE: STANDBY<br>
+      LISTENING: OFF<br>
+      MODE: PERSONAL
+    </div>
+
+    <button class="mic" onclick="activateJarvis()">
+      ACTIVATE
+    </button>
+
+  </div>
+
+  <script>
+    function activateJarvis() {
+      const message = document.getElementById("message");
+
+      message.textContent = "LISTENING...";
+
+      setTimeout(() => {
+        message.textContent = "SYSTEM READY";
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
