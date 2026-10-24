@@ -251,6 +251,44 @@ function listen() {
 
   if (!SpeechRecognition) {
     message.textContent = "VOICE NOT SUPPORTED";
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "pt-BR";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  message.textContent = "FALANDO...";
+
+  recognition.onstart = function() {
+    message.textContent = "OUVINDO...";
+  };
+
+  recognition.onresult = function(event) {
+    const text = event.results[0][0].transcript;
+    message.textContent = text;
+    speak("Você disse: " + text);
+  };
+
+  recognition.onerror = function(event) {
+    message.textContent = "ERRO: " + event.error;
+  };
+
+  recognition.onend = function() {
+    console.log("Reconhecimento encerrado.");
+  };
+
+  recognition.start();
+}
+  const message = document.getElementById("message");
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    message.textContent = "VOICE NOT SUPPORTED";
     speak("Desculpe. O reconhecimento de voz não está disponível neste navegador.");
     return;
   }
