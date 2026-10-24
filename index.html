@@ -231,7 +231,7 @@
   </div>
 
   <script>
-   function speak(text) {
+  function speak(text) {
   const voice = new SpeechSynthesisUtterance(text);
 
   voice.lang = "pt-BR";
@@ -251,6 +251,7 @@ function listen() {
 
   if (!SpeechRecognition) {
     message.textContent = "VOICE NOT SUPPORTED";
+    speak("Desculpe. O reconhecimento de voz não está disponível neste navegador.");
     return;
   }
 
@@ -260,14 +261,11 @@ function listen() {
   recognition.continuous = false;
   recognition.interimResults = false;
 
-  message.textContent = "FALANDO...";
-
-  recognition.onstart = function() {
-    message.textContent = "OUVINDO...";
-  };
+  message.textContent = "LISTENING...";
 
   recognition.onresult = function(event) {
     const text = event.results[0][0].transcript;
+
     message.textContent = text;
     speak("Você disse: " + text);
   };
@@ -282,39 +280,6 @@ function listen() {
 
   recognition.start();
 }
-  const message = document.getElementById("message");
-
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition) {
-    message.textContent = "VOICE NOT SUPPORTED";
-    speak("Desculpe. O reconhecimento de voz não está disponível neste navegador.");
-    return;
-  }
-
-  const recognition = new SpeechRecognition();
-
-  recognition.lang = "pt-BR";
-  recognition.continuous = false;
-  recognition.interimResults = false;
-
-  message.textContent = "LISTENING...";
-
-  recognition.start();
-
-  recognition.onresult = function(event) {
-    const text = event.results[0][0].transcript;
-
-    message.textContent = text;
-
-    speak("Você disse: " + text);
-  };
-
- recognition.onerror = function(event) {
-  message.textContent = "ERRO: " + event.error;
-};
-}
 
 function activateJarvis() {
   const message = document.getElementById("message");
@@ -323,7 +288,7 @@ function activateJarvis() {
 
   speak("Sim. Estou ouvindo.");
 
-  setTimeout(() => {
+  setTimeout(function() {
     listen();
   }, 1500);
 }
